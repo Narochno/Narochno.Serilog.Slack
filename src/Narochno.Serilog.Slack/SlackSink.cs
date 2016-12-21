@@ -14,17 +14,14 @@ namespace Narochno.Serilog.Slack
     {
         private readonly ISlackClient slackClient;
 
-        public SlackBatchingSink(ISlackClient slackClient) : base(50, TimeSpan.FromSeconds(5))
+        public SlackBatchingSink(ISlackClient slackClient) : base(25, TimeSpan.FromSeconds(1))
         {
             this.slackClient = slackClient;
         }
 
         protected override async Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
-            var result = await slackClient.PostMessage(new Message
-            {
-                Attachments = GetAttachments(events).ToList()
-            });
+            var result = await slackClient.PostAttachments(GetAttachments(events));
         }
 
         protected IEnumerable<Attachment> GetAttachments(IEnumerable<LogEvent> events)
@@ -33,18 +30,20 @@ namespace Narochno.Serilog.Slack
             {
                 yield return new Attachment
                 {
-                    Text = ev.RenderMessage(),
                     Timestamp = ev.Timestamp.ToUnixTimeSeconds(),
                     Color = GetColor(ev.Level),
-                    Fields = GetFields(ev.Properties).ToList(),
-                    Footer = ev.Level.ToString()
+                    MrkdwnIn = new[] { "fields" },
+                    Fields = GetFields(ev),
+                    Footer = $"{GetEmoji(ev.Level)} {ev.Level}"
                 };
             }
         }
 
-        protected IEnumerable<Field> GetFields(IReadOnlyDictionary<string, LogEventPropertyValue> properties)
+        protected IEnumerable<Field> GetFields(LogEvent logEvent)
         {
-            foreach (var property in properties.Where(p => !p.Key.All(char.IsNumber)))
+            yield return new Field { Value = logEvent.RenderMessage() };
+
+            foreach (var property in logEvent.Properties.Where(p => !p.Key.All(char.IsNumber)))
             {
                 using (var tw = new StringWriter())
                 {
@@ -55,6 +54,31 @@ namespace Narochno.Serilog.Slack
                         Short = true
                     };
                 }
+            }
+
+            if (logEvent.Exception != null)
+            {
+                yield return new Field
+                {
+                    Title = logEvent.Exception.GetType().FullName,
+                    Value = $"```{logEvent.Exception}```",
+                    Short = false
+                };
+            }
+        }
+
+        protected string GetEmoji(LogEventLevel level)
+        {
+            switch (level)
+            {
+                case LogEventLevel.Error:
+                    return ":exclamation:";
+                case LogEventLevel.Warning:
+                    return ":warning:";
+                case LogEventLevel.Fatal:
+                    return ":x:";
+                default:
+                    return null;
             }
         }
 

@@ -17,7 +17,15 @@ namespace Narochno.Serilog.Slack.Tester
 
             Log.Information("I am some information");
 
-            Log.Error(new Exception(), "I am an exception");
+            try
+            {
+                string test = null;
+                test.Trim();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "I am an exception");
+            }
 
             Log.Information("I am some {Environment} information {Instance} hello {Region}", "Staging", 432432432, "eu-west-1");
 
