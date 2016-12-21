@@ -13,6 +13,7 @@ namespace Narochno.Serilog.Slack.Tester
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Slack(new SlackConfig { WebHookUrl = webHookUrl })
                 .WriteTo.Console()
+                .Enrich.FromLogContext()
                 .CreateLogger();
 
             Log.Information("I am some information");
@@ -27,7 +28,11 @@ namespace Narochno.Serilog.Slack.Tester
                 Log.Error(e, "I am an exception");
             }
 
-            Log.Information("I am some {Environment} information {Instance} hello {Region}", "Staging", 432432432, "eu-west-1");
+            using (LogContext.PushProperty("ProcessName", "Test.exe"))
+            using (LogContext.PushProperty("ThreadId", 7))
+            {
+                Log.Information("I am some {Environment} information {Instance} hello {Region}", "Staging", 432432432, "eu-west-1");
+            }
 
             Log.Warning("I am a warning");
 

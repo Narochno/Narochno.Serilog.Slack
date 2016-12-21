@@ -7,6 +7,9 @@ using Narochno.Slack;
 using Narochno.Slack.Entities;
 using System.Linq;
 using System.IO;
+using Serilog.Formatting.Display;
+using Serilog.Parsing;
+using System.Text;
 
 namespace Narochno.Serilog.Slack
 {
@@ -39,21 +42,51 @@ namespace Narochno.Serilog.Slack
             }
         }
 
+        protected string GetPropertyValue(LogEventPropertyValue value)
+        {
+            var scalar = value as ScalarValue;
+            if (scalar?.Value != null)
+            {
+                return scalar.Value.ToString();
+            }
+
+            return value.ToString();
+        }
+
+        protected string GetMessage(LogEvent logEvent)
+        {
+            var messageBuilder = new StringBuilder();
+            foreach (var messageToken in logEvent.MessageTemplate.Tokens)
+            {
+                var messagePropertyToken = messageToken as PropertyToken;
+                if (messagePropertyToken != null)
+                {
+                    var property = logEvent.Properties[messagePropertyToken.PropertyName];
+                    messageBuilder.AppendFormat("`{0}`", GetPropertyValue(property));
+                }
+                else
+                {
+                    messageBuilder.Append(messageToken.ToString());
+                }
+            }
+            return messageBuilder.ToString();
+        }
+
         protected IEnumerable<Field> GetFields(LogEvent logEvent)
         {
-            yield return new Field { Value = logEvent.RenderMessage() };
+            yield return new Field { Value = GetMessage(logEvent) };
 
-            foreach (var property in logEvent.Properties.Where(p => !p.Key.All(char.IsNumber)))
+            var propertyTokens = logEvent.MessageTemplate.Tokens.OfType<PropertyToken>().Select(x => x.PropertyName);
+
+            var contextProperties = logEvent.Properties.Where(p => !p.Key.All(char.IsNumber) && !propertyTokens.Contains(p.Key));
+            foreach (var property in contextProperties)
             {
-                using (var tw = new StringWriter())
+                yield return new Field
                 {
-                    yield return new Field
-                    {
-                        Title = property.Key,
-                        Value = property.Value.ToString(),
-                        Short = true
-                    };
-                }
+                    Title = property.Key,
+                    Value = GetPropertyValue(property.Value),
+                    Short = true
+                };
             }
 
             if (logEvent.Exception != null)
