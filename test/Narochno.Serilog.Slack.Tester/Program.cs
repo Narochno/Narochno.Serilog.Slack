@@ -1,5 +1,6 @@
 ﻿using Narochno.Slack;
 using Serilog;
+using Serilog.Context;
 using System;
 
 namespace Narochno.Serilog.Slack.Tester
