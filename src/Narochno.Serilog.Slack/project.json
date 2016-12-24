@@ -1,8 +1,8 @@
 {
-  "version": "1.0.3",
+  "version": "1.0.4",
 
   "dependencies": {
-    "Narochno.Slack": "1.4.1",
+    "Narochno.Slack": "1.4.2",
     "Serilog.Sinks.PeriodicBatching": "2.1.0"
   },
 
