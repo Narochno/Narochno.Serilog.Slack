@@ -6,8 +6,6 @@ using System;
 using Narochno.Slack;
 using Narochno.Slack.Entities;
 using System.Linq;
-using System.IO;
-using Serilog.Formatting.Display;
 using Serilog.Parsing;
 using System.Text;
 
