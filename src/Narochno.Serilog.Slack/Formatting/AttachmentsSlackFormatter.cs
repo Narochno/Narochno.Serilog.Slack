@@ -1,28 +1,23 @@
-﻿using Serilog.Sinks.PeriodicBatching;
+﻿using Narochno.Slack.Entities;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Serilog.Events;
-using System;
-using Narochno.Slack;
-using Narochno.Slack.Entities;
-using System.Linq;
-using Serilog.Parsing;
 using System.Text;
+using Serilog.Parsing;
+using System.Linq;
 
-namespace Narochno.Serilog.Slack
+namespace Narochno.Serilog.Slack.Formatting
 {
-    public class SlackBatchingSink : PeriodicBatchingSink
+    /// <summary>
+    /// Formats each log message as an attachment.
+    /// </summary>
+    public class AttachmentsSlackFormatter : ISlackFormatter
     {
-        private readonly ISlackClient slackClient;
-
-        public SlackBatchingSink(ISlackClient slackClient) : base(25, TimeSpan.FromSeconds(1))
+        public Message CreateMessage(IEnumerable<LogEvent> events)
         {
-            this.slackClient = slackClient;
-        }
-
-        protected override async Task EmitBatchAsync(IEnumerable<LogEvent> events)
-        {
-            var result = await slackClient.PostAttachments(GetAttachments(events));
+            return new Message
+            {
+                Attachments = GetAttachments(events)
+            };
         }
 
         protected IEnumerable<Attachment> GetAttachments(IEnumerable<LogEvent> events)
@@ -124,12 +119,6 @@ namespace Narochno.Serilog.Slack
                 default:
                     return "good";
             }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            slackClient.Dispose();
-            base.Dispose(disposing);
         }
     }
 }
