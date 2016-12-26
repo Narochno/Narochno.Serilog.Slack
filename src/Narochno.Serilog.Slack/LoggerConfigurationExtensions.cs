@@ -1,4 +1,5 @@
-﻿using Narochno.Slack;
+﻿using Narochno.Serilog.Slack.Formatting;
+using Narochno.Slack;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Events;
@@ -21,7 +22,8 @@ namespace Narochno.Serilog.Slack
             }
 
             var slackClient = new SlackClient(slackConfig);
-            var batchingSink = new SlackBatchingSink(slackClient);
+            var messageFormatter = new AttachmentsSlackFormatter();
+            var batchingSink = new SlackBatchingSink(slackClient, messageFormatter);
             return loggerConfiguration.Sink(batchingSink, minimumLevel);
         }
     }
