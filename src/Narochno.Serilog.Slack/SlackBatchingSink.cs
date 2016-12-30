@@ -5,6 +5,8 @@ using Serilog.Events;
 using System;
 using Narochno.Slack;
 using Narochno.Serilog.Slack.Formatting;
+using Serilog.Debugging;
+using Narochno.Slack.Entities;
 
 namespace Narochno.Serilog.Slack
 {
@@ -22,7 +24,11 @@ namespace Narochno.Serilog.Slack
 
         protected override async Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
-            await slackClient.PostMessage(messageFormatter.CreateMessage(events));
+            var result = await slackClient.PostMessage(messageFormatter.CreateMessage(events));
+            if (result != SlackCode.Ok)
+            {
+                SelfLog.WriteLine("Got error response from Slack: {0}", result);
+            }
         }
 
         protected override void Dispose(bool disposing)
