@@ -30,6 +30,7 @@ namespace Narochno.Serilog.Slack.Formatting
                     Color = GetColor(ev.Level),
                     MrkdwnIn = new[] { "fields" },
                     Fields = GetFields(ev),
+                    Fallback = $"[{ev.Level}] {ev.RenderMessage(null)}",
                     Footer = $"{GetEmoji(ev.Level)} {ev.Level}"
                 };
             }
