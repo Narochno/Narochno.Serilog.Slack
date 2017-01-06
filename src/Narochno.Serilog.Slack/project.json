@@ -1,13 +1,19 @@
 {
-  "version": "1.1.2",
+    "version": "1.2.0",
+    "authors": [ "alanedwardes", "adamhathcock" ],
 
-  "dependencies": {
-    "Narochno.Slack": "1.5.0",
-    "Serilog.Sinks.PeriodicBatching": "2.1.0"
-  },
+    "packOptions": {
+        "tags": [ "serilog", "slack" ],
+        "projectUrl": "https://github.com/Narochno/Narochno.Serilog.Slack"
+    },
 
-  "frameworks": {  
-    "netstandard1.3": {
+    "dependencies": {
+        "Narochno.Slack": "1.6.0",
+        "Serilog.Sinks.PeriodicBatching": "2.1.0"
+    },
+
+    "frameworks": {
+        "netstandard1.3": {
+        }
     }
-  }
 }
