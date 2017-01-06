@@ -5,12 +5,12 @@
   },
 
   "dependencies": {
-    "Narochno.Serilog.Slack": "*",
+    "Narochno.Serilog.Slack": {"target": "project"},
     "Serilog.Sinks.Console": "2.1.0"
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
+    "netcoreapp1.1": {
       "dependencies": {
         "Microsoft.NETCore.App": {
           "type": "platform",
