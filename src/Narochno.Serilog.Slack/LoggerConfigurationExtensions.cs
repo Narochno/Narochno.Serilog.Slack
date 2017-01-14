@@ -22,7 +22,29 @@ namespace Narochno.Serilog.Slack
             }
 
             var slackClient = new SlackClient(slackConfig);
-            var messageFormatter = new AttachmentsSlackFormatter();
+            var messageFormatter = new FieldsSlackFormatter();
+            var batchingSink = new SlackBatchingSink(slackClient, messageFormatter);
+            return loggerConfiguration.Sink(batchingSink, minimumLevel);
+        }
+
+        public static LoggerConfiguration Slack(this LoggerSinkConfiguration loggerConfiguration, SlackConfig slackConfig, ISlackFormatter messageFormatter, LogEventLevel minimumLevel = LevelAlias.Minimum)
+        {
+            if (loggerConfiguration == null)
+            {
+                throw new ArgumentNullException(nameof(loggerConfiguration));
+            }
+
+            if (slackConfig == null)
+            {
+                throw new ArgumentNullException(nameof(slackConfig));
+            }
+
+            if (messageFormatter == null)
+            {
+                throw new ArgumentNullException(nameof(messageFormatter));
+            }
+
+            var slackClient = new SlackClient(slackConfig);
             var batchingSink = new SlackBatchingSink(slackClient, messageFormatter);
             return loggerConfiguration.Sink(batchingSink, minimumLevel);
         }
