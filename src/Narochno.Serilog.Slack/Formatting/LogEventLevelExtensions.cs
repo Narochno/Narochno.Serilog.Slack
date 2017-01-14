@@ -1,11 +1,10 @@
-﻿using Narochno.Primitives;
-using Serilog.Events;
+﻿using Serilog.Events;
 
 namespace Narochno.Serilog.Slack.Formatting
 {
     public static class LogEventLevelExtensions
     {
-        public static Optional<string> GetEmoji(this LogEventLevel level)
+        public static string GetEmoji(this LogEventLevel level)
         {
             switch (level)
             {
