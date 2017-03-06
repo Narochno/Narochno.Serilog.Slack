@@ -3,6 +3,9 @@ using Narochno.Slack;
 using Serilog;
 using Serilog.Context;
 using System;
+using System.Net.Http;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace Narochno.Serilog.Slack.Tester
 {
