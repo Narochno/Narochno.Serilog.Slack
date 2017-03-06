@@ -1,5 +1,5 @@
 {
-    "version": "1.3.1",
+    "version": "1.4.0",
     
     "name": "Narochno.Serilog.Slack",
     "authors": [ "alanedwardes", "adamhathcock" ],
@@ -13,6 +13,7 @@
 
     "dependencies": {
         "Narochno.Slack": "2.0.0",
+        "AsyncFriendlyStackTrace": "1.4.1",
         "Serilog.Sinks.PeriodicBatching": "2.1.0"
     },
 
