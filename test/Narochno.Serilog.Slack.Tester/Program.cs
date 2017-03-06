@@ -3,6 +3,9 @@ using Narochno.Slack;
 using Serilog;
 using Serilog.Context;
 using System;
+using System.Net.Http;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace Narochno.Serilog.Slack.Tester
 {
@@ -14,7 +17,7 @@ namespace Narochno.Serilog.Slack.Tester
 
             Log.Logger = new LoggerConfiguration()
                 //.WriteTo.Slack(new SlackConfig { WebHookUrl = webHookUrl })
-                .WriteTo.Slack(new SlackConfig { WebHookUrl = webHookUrl }, new AttachmentsSlackFormatter())
+                .WriteTo.Slack(new SlackConfig { WebHookUrl = webHookUrl }, new FieldsSlackFormatter())
                 .WriteTo.Console()
                 .Enrich.FromLogContext()
                 .CreateLogger();
@@ -31,6 +34,8 @@ namespace Narochno.Serilog.Slack.Tester
                 Log.Error(e, "I am an exception");
             }
 
+            AsyncException().Wait();
+
             using (LogContext.PushProperty("ProcessName", "Test.exe"))
             using (LogContext.PushProperty("ThreadId", 7))
             {
@@ -40,6 +45,21 @@ namespace Narochno.Serilog.Slack.Tester
             Log.Warning("I am a warning");
 
             Console.ReadLine();
+        }
+
+        public static async Task AsyncException()
+        {
+            try
+            {
+                using (var client = new TcpClient())
+                {
+                    await client.ConnectAsync("only testing", 99);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "I am an exception");
+            }
         }
     }
 }
