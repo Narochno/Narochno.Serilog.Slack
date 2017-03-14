@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{03832598-BDDC-4404-AD7B-F1D82B690821}"
 EndProject
@@ -12,11 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Narochno.Serilog.Slack", "src\Narochno.Serilog.Slack\Narochno.Serilog.Slack.xproj", "{F8AE5C6B-0A01-4158-BA04-C39498FE82B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Narochno.Serilog.Slack", "src\Narochno.Serilog.Slack\Narochno.Serilog.Slack.csproj", "{F8AE5C6B-0A01-4158-BA04-C39498FE82B1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8A250CB2-7616-4990-9279-BEEE3A78E468}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Narochno.Serilog.Slack.Tester", "test\Narochno.Serilog.Slack.Tester\Narochno.Serilog.Slack.Tester.xproj", "{3966FAA7-D930-4727-B9B5-0E1F83FD1205}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Narochno.Serilog.Slack.Tester", "test\Narochno.Serilog.Slack.Tester\Narochno.Serilog.Slack.Tester.csproj", "{3966FAA7-D930-4727-B9B5-0E1F83FD1205}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

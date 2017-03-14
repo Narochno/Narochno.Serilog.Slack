@@ -1,8 +1,10 @@
-version: '{build}'  
-pull_requests:  
+version: '{build}'
+image: Visual Studio 2017
+
+pull_requests:
   do_not_increment_build_number: true
 
-branches:  
+branches:
   only:
   - master
 
@@ -13,7 +15,7 @@ before_build:
 - cmd: dotnet restore
 
 after_build:
-- dotnet pack "src\Narochno.Serilog.Slack\project.json" -c Release
+- dotnet pack "src\Narochno.Serilog.Slack" -c Release
 
 artifacts:
 - path: src\Narochno.Serilog.Slack\bin\Release\*.nupkg
