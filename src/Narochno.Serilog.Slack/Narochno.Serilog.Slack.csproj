@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>A batching Serilog sink for Slack. Each log message is sent as an attachment on the same message, with the log event properties rendered out as fields.</Description>
+    <VersionPrefix>1.4.0</VersionPrefix>
+    <Authors>alanedwardes;adamhathcock</Authors>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <AssemblyName>Narochno.Serilog.Slack</AssemblyName>
+    <PackageId>Narochno.Serilog.Slack</PackageId>
+    <PackageTags>serilog;csharp;slack;netcore</PackageTags>
+    <PackageIconUrl>https://avatars.githubusercontent.com/u/24652538</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/Narochno/Narochno.Serilog.Slack</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Narochno.Slack" Version="2.1.1" />
+    <PackageReference Include="AsyncFriendlyStackTrace" Version="1.4.1" />
+    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.1.0" />
+  </ItemGroup>
+
+</Project>

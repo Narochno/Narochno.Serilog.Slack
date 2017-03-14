@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <AssemblyName>Narochno.Serilog.Slack.Tester</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>Narochno.Serilog.Slack.Tester</PackageId>
+    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Narochno.Serilog.Slack\Narochno.Serilog.Slack.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog.Sinks.Console" Version="2.1.0" />
+  </ItemGroup>
+
+</Project>
