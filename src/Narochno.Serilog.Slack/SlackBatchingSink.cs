@@ -22,7 +22,7 @@ namespace Narochno.Serilog.Slack
 
         protected override async Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
-            await slackClient.PostMessage(messageFormatter.CreateMessage(events));
+            await slackClient.IncomingWebHook(messageFormatter.CreateMessage(events));
         }
 
         protected override void Dispose(bool disposing)

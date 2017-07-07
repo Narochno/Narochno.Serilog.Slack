@@ -5,6 +5,7 @@ using System.Text;
 using Serilog.Parsing;
 using System.Linq;
 using AsyncFriendlyStackTrace;
+using Narochno.Slack.Entities.Requests;
 
 namespace Narochno.Serilog.Slack.Formatting
 {
@@ -13,9 +14,9 @@ namespace Narochno.Serilog.Slack.Formatting
     /// </summary>
     public class FieldsSlackFormatter : ISlackFormatter
     {
-        public Message CreateMessage(IEnumerable<LogEvent> events)
+        public IncomingWebHookRequest CreateMessage(IEnumerable<LogEvent> events)
         {
-            return new Message
+            return new IncomingWebHookRequest
             {
                 Attachments = GetAttachments(events)
             };
