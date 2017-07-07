@@ -1,4 +1,5 @@
 ﻿using Narochno.Slack.Entities;
+using Narochno.Slack.Entities.Requests;
 using Serilog.Events;
 using System.Collections.Generic;
 
@@ -9,9 +10,9 @@ namespace Narochno.Serilog.Slack.Formatting
     /// </summary>
     public class AttachmentsSlackFormatter : ISlackFormatter
     {
-        public Message CreateMessage(IEnumerable<LogEvent> events)
+        public IncomingWebHookRequest CreateMessage(IEnumerable<LogEvent> events)
         {
-            return new Message
+            return new IncomingWebHookRequest
             {
                 Attachments = GetAttachments(events)
             };
