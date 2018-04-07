@@ -1,53 +1,53 @@
 ﻿using Narochno.Serilog.Slack.Formatting;
+using Narochno.Serilog.Slack.Sinks;
 using Narochno.Slack;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Events;
 using System;
-using System.Net.Http;
 
 namespace Narochno.Serilog.Slack
 {
     public static class LoggerConfigurationExtensions
     {
-        public static LoggerConfiguration Slack(this LoggerSinkConfiguration loggerConfiguration, SlackConfig slackConfig, LogEventLevel minimumLevel = LevelAlias.Minimum, HttpClient httpClient = null)
+        private static readonly TimeSpan DefaultBatchPeriod = TimeSpan.FromSeconds(5);
+        private const int DefaultBatchSize = 25;
+
+        /// <summary>
+        /// Write to Slack using batches of messages in the background.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="slackConfig">A config object for the <see cref="SlackClient"/></param>
+        /// <param name="logLevel">The minimum log level to invoke this sink for</param>
+        /// <param name="formatter">A <see cref="ISlackFormatter"/> for Slack</param>
+        /// <param name="batchSizeLimit">The maximum batch size for the sink to send</param>
+        /// <param name="period">How often the sink should send messages to Slack</param>
+        /// <returns></returns>
+        public static LoggerConfiguration SlackBatching(this LoggerSinkConfiguration configuration, SlackConfig slackConfig, LogEventLevel logLevel = LevelAlias.Minimum, ISlackFormatter formatter = null, int batchSizeLimit = DefaultBatchSize, TimeSpan period = default(TimeSpan))
         {
-            if (loggerConfiguration == null)
-            {
-                throw new ArgumentNullException(nameof(loggerConfiguration));
-            }
+            configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            slackConfig = slackConfig ?? throw new ArgumentNullException(nameof(slackConfig));
+            formatter = formatter ?? new FieldsSlackFormatter();
+            period = period == default(TimeSpan) ? DefaultBatchPeriod : period;
 
-            if (slackConfig == null)
-            {
-                throw new ArgumentNullException(nameof(slackConfig));
-            }
-
-            var slackClient = new SlackClient(httpClient ?? new HttpClient(), slackConfig);
-            var messageFormatter = new FieldsSlackFormatter();
-            var batchingSink = new SlackBatchingSink(slackClient, messageFormatter);
-            return loggerConfiguration.Sink(batchingSink, minimumLevel);
+            return configuration.Sink(new SlackBatchingSink(new SlackClient(slackConfig), formatter, batchSizeLimit, period), logLevel);
         }
 
-        public static LoggerConfiguration Slack(this LoggerSinkConfiguration loggerConfiguration, SlackConfig slackConfig, ISlackFormatter messageFormatter, LogEventLevel minimumLevel = LevelAlias.Minimum, HttpClient httpClient = null)
+        /// <summary>
+        /// Write to Slack and block the application while the request completes.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="slackConfig">A config object for the <see cref="SlackClient"/></param>
+        /// <param name="logLevel">The minimum log level to invoke this sink for</param>
+        /// <param name="formatter">A <see cref="ISlackFormatter"/> for Slack</param>
+        /// <returns></returns>
+        public static LoggerConfiguration SlackBlocking(this LoggerSinkConfiguration configuration, SlackConfig slackConfig, LogEventLevel logLevel = LevelAlias.Minimum, ISlackFormatter formatter = null)
         {
-            if (loggerConfiguration == null)
-            {
-                throw new ArgumentNullException(nameof(loggerConfiguration));
-            }
+            configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            slackConfig = slackConfig ?? throw new ArgumentNullException(nameof(slackConfig));
+            formatter = formatter ?? new FieldsSlackFormatter();
 
-            if (slackConfig == null)
-            {
-                throw new ArgumentNullException(nameof(slackConfig));
-            }
-
-            if (messageFormatter == null)
-            {
-                throw new ArgumentNullException(nameof(messageFormatter));
-            }
-
-            var slackClient = new SlackClient(httpClient ?? new HttpClient(), slackConfig);
-            var batchingSink = new SlackBatchingSink(slackClient, messageFormatter);
-            return loggerConfiguration.Sink(batchingSink, minimumLevel);
+            return configuration.Sink(new SlackBlockingSink(new SlackClient(slackConfig), formatter), logLevel);
         }
     }
 }
