@@ -1,9 +1,7 @@
-﻿using Narochno.Serilog.Slack.Formatting;
-using Narochno.Slack;
+﻿using Narochno.Slack;
 using Serilog;
 using Serilog.Context;
 using System;
-using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
@@ -16,8 +14,7 @@ namespace Narochno.Serilog.Slack.Tester
             var webHookUrl = "your webhook URL";
 
             Log.Logger = new LoggerConfiguration()
-                //.WriteTo.Slack(new SlackConfig { WebHookUrl = webHookUrl })
-                .WriteTo.Slack(new SlackConfig { WebHookUrl = webHookUrl }, new FieldsSlackFormatter())
+                .WriteTo.SlackBatching(new SlackConfig { WebHookUrl = webHookUrl })
                 .WriteTo.Console()
                 .Enrich.FromLogContext()
                 .CreateLogger();

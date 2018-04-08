@@ -2,7 +2,7 @@
 
 namespace Narochno.Serilog.Slack.Formatting
 {
-    public static class LogEventLevelExtensions
+    internal static class LogEventLevelExtensions
     {
         public static string GetEmoji(this LogEventLevel level)
         {
