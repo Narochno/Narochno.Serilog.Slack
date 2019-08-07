@@ -27,6 +27,8 @@ namespace Narochno.Serilog.Slack.Formatting
                     return "danger";
                 case LogEventLevel.Warning:
                     return "warning";
+                case LogEventLevel.Fatal:
+                    return "danger";
                 default:
                     return "good";
             }
