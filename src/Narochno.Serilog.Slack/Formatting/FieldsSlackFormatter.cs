@@ -4,7 +4,6 @@ using Serilog.Events;
 using System.Text;
 using Serilog.Parsing;
 using System.Linq;
-using AsyncFriendlyStackTrace;
 using Narochno.Slack.Entities.Requests;
 
 namespace Narochno.Serilog.Slack.Formatting
@@ -90,7 +89,7 @@ namespace Narochno.Serilog.Slack.Formatting
                 yield return new Field
                 {
                     Title = logEvent.Exception.GetType().FullName,
-                    Value = $"```{logEvent.Exception.ToAsyncString()}```",
+                    Value = $"```{logEvent.Exception}```",
                     Short = false
                 };
             }

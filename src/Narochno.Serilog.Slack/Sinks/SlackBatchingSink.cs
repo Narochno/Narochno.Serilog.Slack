@@ -10,19 +10,19 @@ namespace Narochno.Serilog.Slack.Sinks
 {
     public sealed class SlackBatchingSink : PeriodicBatchingSink
     {
-        private readonly ISlackClient client;
-        private readonly ISlackFormatter formatter;
+        private readonly ISlackClient _client;
+        private readonly ISlackFormatter _formatter;
 
         public SlackBatchingSink(ISlackClient client, ISlackFormatter formatter, int batchSizeLimit, TimeSpan period)
             : base(batchSizeLimit, period)
         {
-            this.client = client;
-            this.formatter = formatter;
+            _client = client;
+            _formatter = formatter;
         }
 
         protected override async Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
-            await client.IncomingWebHook(formatter.CreateMessage(events));
+            await _client.IncomingWebHook(_formatter.CreateMessage(events));
         }
     }
 }
