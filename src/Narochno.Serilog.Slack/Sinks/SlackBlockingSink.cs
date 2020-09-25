@@ -9,20 +9,20 @@ namespace Narochno.Serilog.Slack.Sinks
 {
     public sealed class SlackBlockingSink : ILogEventSink
     {
-        private readonly ISlackClient client;
-        private readonly ISlackFormatter formatter;
+        private readonly ISlackClient _client;
+        private readonly ISlackFormatter _formatter;
 
         public SlackBlockingSink(ISlackClient slackClient, ISlackFormatter formatter)
         {
-            this.client = slackClient;
-            this.formatter = formatter;
+            _client = slackClient;
+            _formatter = formatter;
         }
 
         public void Emit(LogEvent logEvent)
         {
             try
             {
-                client.IncomingWebHook(formatter.CreateMessage(new[] { logEvent })).GetAwaiter().GetResult();
+                _client.IncomingWebHook(_formatter.CreateMessage(new[] { logEvent })).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
